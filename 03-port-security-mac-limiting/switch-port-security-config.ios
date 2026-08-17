@@ -1,0 +1,60 @@
+! ==============================================================================
+! Device: Switch (Multilayer Switch0)
+! Platform: Cisco Catalyst 3650-24PS (IOS-XE 16.3.2)
+! Role: Access Layer Switchport Security & Violation Mitigation
+! ==============================================================================
+version 16.3.2
+service timestamps log datetime msec
+service timestamps debug datetime msec
+no service password-encryption
+!
+hostname Switch
+!
+no ip domain-lookup
+spanning-tree mode pvst
+!
+! --- Port 1: Dynamic Learning with Shutdown Violation (Strict Policy) ---
+interface GigabitEthernet1/0/1
+ description Corporate_PC0_Dynamic_Shutdown
+ switchport mode access
+ switchport port-security
+ switchport port-security maximum 1
+ switchport port-security violation shutdown
+ no shutdown
+!
+! --- Port 2: Static MAC Assignment with Protect Violation (Silent Drop) ---
+interface GigabitEthernet1/0/2
+ description Executive_PC1_Static_Protect
+ switchport mode access
+ switchport port-security
+ switchport port-security maximum 2
+ switchport port-security violation protect
+ switchport port-security mac-address 0002.2222.2222
+ no shutdown
+!
+! --- Port 3: Sticky Learning with Restrict Violation (Logged & Monitored) ---
+interface GigabitEthernet1/0/3
+ description Engineering_PC2_Sticky_Restrict
+ switchport mode access
+ switchport port-security
+ switchport port-security maximum 3
+ switchport port-security mac-address sticky
+ switchport port-security violation restrict
+ switchport port-security mac-address sticky 0003.3333.3333
+ no shutdown
+!
+! --- Automated Errdisable Recovery for Port Security Violations ---
+errdisable recovery cause psecure-violation
+errdisable recovery interval 30
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+!
+end
