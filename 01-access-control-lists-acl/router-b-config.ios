@@ -1,0 +1,63 @@
+! ==============================================================================
+! Device: Router B (Branch B Gateway)
+! Platform: Cisco 2811 (IOS 15.1)
+! Role: OSPF Routing & Extended ACL 105 Filtering Engine
+! ==============================================================================
+version 15.1
+service timestamps log datetime msec
+service timestamps debug datetime msec
+no service password-encryption
+!
+hostname B
+!
+no ip domain-lookup
+spanning-tree mode pvst
+!
+interface FastEthernet0/0
+ description LAN_Branch_B
+ ip address 200.100.100.100 255.255.255.0
+ duplex auto
+ speed auto
+ no shutdown
+!
+interface FastEthernet0/1
+ no ip address
+ shutdown
+!
+interface Serial0/0/0
+ description WAN_to_Router_A (Inbound ACL Applied)
+ ip address 1.1.1.2 255.0.0.0
+ ip access-group 105 in
+ clock rate 2000000
+ no shutdown
+!
+interface Serial0/0/1
+ no ip address
+ clock rate 2000000
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router ospf 7
+ log-adjacency-changes
+ network 1.1.1.2 0.0.0.0 area 0
+ network 200.100.100.0 0.0.0.255 area 0
+!
+ip classless
+!
+! --- Extended Access Control List (ACL 105) ---
+! Deny Telnet (TCP 23) from Router A WAN IP to Router B LAN IP
+access-list 105 deny tcp host 1.1.1.1 host 200.100.100.100 eq telnet
+! Permit all other IP traffic (ICMP, OSPF, HTTP, etc.)
+access-list 105 permit ip any any
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ password corvit
+ login
+!
+end
