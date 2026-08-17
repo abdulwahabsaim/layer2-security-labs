@@ -1,0 +1,33 @@
+! ==============================================================================
+! Device: Switch Attacker (Rogue Adversarial Switch)
+! Role: Simulated Attack Switch injecting Priority 0 BPDUs to hijack Root role
+! Platform: Cisco Catalyst 3650-24PS (IOS-XE 16.3.2)
+! ==============================================================================
+version 16.3.2
+service timestamps log datetime msec
+service timestamps debug datetime msec
+no service password-encryption
+!
+hostname Attacker
+!
+no ip domain-lookup
+spanning-tree mode pvst
+spanning-tree vlan 1 priority 0
+!
+interface GigabitEthernet1/0/1
+ description Rogue_Link_to_S2
+!
+interface GigabitEthernet1/0/2
+ description Rogue_Link_to_S3
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+!
+end
