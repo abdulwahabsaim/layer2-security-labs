@@ -1,0 +1,31 @@
+! ==============================================================================
+! Device: Switch S2 (Primary Root Bridge)
+! Role: Core Layer STP Root Bridge (Priority 4096) with Root Guard on Downlinks
+! Platform: Cisco Catalyst 3650-24PS (IOS-XE 16.3.2)
+! ==============================================================================
+version 16.3.2
+service timestamps log datetime msec
+service timestamps debug datetime msec
+no service password-encryption
+!
+hostname S2
+!
+no ip domain-lookup
+spanning-tree mode pvst
+spanning-tree vlan 1 priority 4096
+!
+interface range GigabitEthernet1/0/1 - 24
+ description Downlink_Ports_RootGuard_Protected
+ spanning-tree guard root
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+!
+end
