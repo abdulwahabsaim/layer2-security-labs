@@ -1,0 +1,55 @@
+! ==============================================================================
+! Device: Router A (Branch A Gateway)
+! Platform: Cisco 2811 (IOS 15.1)
+! Role: OSPF Routing & Traffic Generator
+! ==============================================================================
+version 15.1
+service timestamps log datetime msec
+service timestamps debug datetime msec
+no service password-encryption
+!
+hostname A
+!
+no ip domain-lookup
+spanning-tree mode pvst
+!
+interface FastEthernet0/0
+ description LAN_Branch_A
+ ip address 200.100.50.100 255.255.255.0
+ duplex auto
+ speed auto
+ no shutdown
+!
+interface FastEthernet0/1
+ no ip address
+ shutdown
+!
+interface Serial0/0/0
+ description WAN_to_Router_B
+ ip address 1.1.1.1 255.0.0.0
+ no shutdown
+!
+interface Serial0/0/1
+ no ip address
+ clock rate 2000000
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router ospf 7
+ log-adjacency-changes
+ network 1.1.1.1 0.0.0.0 area 0
+ network 200.100.50.0 0.0.0.255 area 0
+!
+ip classless
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ password corvit
+ login
+!
+end
