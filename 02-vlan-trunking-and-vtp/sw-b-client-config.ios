@@ -1,0 +1,28 @@
+! ==============================================================================
+! Device: Switch B (SW-B) | Platform: Cisco Catalyst 2960 | Role: VTP Client
+! ==============================================================================
+version 15.0
+hostname SW-B
+!
+vtp domain corvit
+vtp mode client
+!
+interface FastEthernet0/1
+ description Interswitch_Trunk_Link_to_SW-A
+ switchport mode trunk
+!
+interface FastEthernet0/2
+ description Access_VLAN3_Engineering
+ switchport mode access
+ switchport access vlan 3
+!
+interface FastEthernet0/3
+ description Access_VLAN2_Sales_HR
+ switchport mode access
+ switchport access vlan 2
+!
+line con 0
+line vty 0 4
+ login
+!
+end
