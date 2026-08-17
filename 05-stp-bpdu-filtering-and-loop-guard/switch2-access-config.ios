@@ -1,0 +1,38 @@
+! ==============================================================================
+! Device: Switch2 (Access Layer Switch)
+! Platform: Cisco Catalyst 3650-24PS (IOS-XE 16.3.2)
+! Roles: Non-Root Switch (Priority 16384), Loop Guard Enabled
+! ==============================================================================
+version 16.3.2
+service timestamps log datetime msec
+service timestamps debug datetime msec
+no service password-encryption
+!
+hostname Switch2
+!
+no ip domain-lookup
+spanning-tree mode pvst
+spanning-tree vlan 1 priority 16384
+spanning-tree loopguard default
+!
+interface GigabitEthernet1/0/1
+ description Trunk_to_Switch0_RootPort
+!
+interface GigabitEthernet1/0/2
+ description Access_to_PC2
+ switchport mode access
+!
+interface GigabitEthernet1/0/3
+ description Trunk_to_Switch1_AlternatePort
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+!
+end
