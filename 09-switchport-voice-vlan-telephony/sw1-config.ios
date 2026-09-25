@@ -1,0 +1,31 @@
+hostname SW1
+!
+vlan 10
+ name Engineering_Data
+!
+vlan 20
+ name Telephony_Voice
+!
+interface GigabitEthernet1/0/1
+ description ## 802.1Q Trunk Uplink to Gateway Router ##
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20
+ no shutdown
+!
+interface GigabitEthernet1/0/2
+ description ## Converged Access: IP Phone 1 + PC1 ##
+ switchport mode access
+ switchport access vlan 10
+ switchport voice vlan 20
+ spanning-tree portfast
+ no shutdown
+!
+interface GigabitEthernet1/0/3
+ description ## Converged Access: IP Phone 2 + PC2 ##
+ switchport mode access
+ switchport access vlan 10
+ switchport voice vlan 20
+ spanning-tree portfast
+ no shutdown
+!
+end
