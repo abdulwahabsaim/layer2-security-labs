@@ -1,0 +1,22 @@
+hostname SW2
+!
+! 1. Globally disable legacy CDP and enable open-standard LLDP
+no cdp run
+lldp run
+!
+! 2. Granularly disable discovery protocol leakage on ALL access ports
+interface range FastEthernet0/1 - 24
+ description ## Untrusted Edge Ports - Hardened ##
+ no cdp enable
+ no lldp transmit
+ no lldp receive
+!
+interface GigabitEthernet0/1
+ description ## Hardened Port ##
+ no lldp transmit
+ no lldp receive
+!
+interface GigabitEthernet0/2
+ description ## Infrastructure Uplink to R2 (LLDP Active) ##
+!
+end
