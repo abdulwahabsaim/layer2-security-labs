@@ -1,0 +1,27 @@
+hostname DSW1
+!
+! 1. Spanning Tree Priority Alignment
+spanning-tree vlan 10 priority 24576
+spanning-tree vlan 20 priority 28672
+!
+interface Vlan10
+ description ## Engineering SVI - Active Gateway ##
+ mac-address 000c.856a.5001
+ ip address 10.0.10.1 255.255.255.0
+ standby version 2
+ standby 10 ip 10.0.10.254
+ standby 10 priority 105
+ standby 10 preempt
+ no shutdown
+!
+interface Vlan20
+ description ## Sales SVI - Standby Gateway ##
+ mac-address 000c.856a.5002
+ ip address 10.0.20.1 255.255.255.0
+ standby version 2
+ standby 20 ip 10.0.20.254
+ standby 20 priority 95
+ standby 20 preempt
+ no shutdown
+!
+end
