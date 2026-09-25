@@ -1,0 +1,35 @@
+hostname R1
+!
+! 1. Extended ACL 101: Ingress Policy Enforcement on LAN 2
+access-list 101 deny ip 172.16.2.0 0.0.0.255 host 172.16.1.1
+access-list 101 deny tcp 172.16.2.0 0.0.0.255 host 192.168.2.100 eq 443
+access-list 101 deny tcp 172.16.2.0 0.0.0.255 host 192.168.2.100 eq www
+access-list 101 permit ip any any
+!
+! 2. Extended ACL 102: Ingress Policy Enforcement on LAN 1
+access-list 102 deny udp 172.16.1.0 0.0.0.255 host 192.168.1.100 eq domain
+access-list 102 permit ip any any
+!
+interface GigabitEthernet0/0
+ description ## LAN 1 Gateway - Ingress Filter (ACL 102) ##
+ ip address 172.16.1.254 255.255.255.0
+ ip access-group 102 in
+ duplex auto
+ speed auto
+ no shutdown
+!
+interface GigabitEthernet0/1
+ description ## LAN 2 Gateway - Ingress Filter (ACL 101) ##
+ ip address 172.16.2.254 255.255.255.0
+ ip access-group 101 in
+ duplex auto
+ speed auto
+ no shutdown
+!
+interface Serial0/0/0
+ description ## WAN Point-to-Point Uplink to R2 ##
+ ip address 203.0.113.1 255.255.255.252
+ clock rate 128000
+ no shutdown
+!
+end
