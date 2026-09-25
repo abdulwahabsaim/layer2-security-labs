@@ -1,0 +1,24 @@
+hostname SW2
+!
+! 1. Cryptographic Prerequisite
+ip domain-name jeremysitlab.com
+!
+! 2. Local AAA Account (Type 5 Hash)
+username jeremy secret 5 $1$mERr$Bok4KDfVutXOJolNq009M/
+!
+! 3. Management ACL: Only allow authorized NOC Workstation (PC1)
+access-list 1 permit host 192.168.1.1
+!
+! 4. Hardening Virtual Terminal Lines
+line vty 0 4
+ access-class 1 in
+ exec-timeout 5 0
+ login local
+ transport input ssh
+line vty 5 15
+ access-class 1 in
+ exec-timeout 5 0
+ login local
+ transport input ssh
+!
+end
