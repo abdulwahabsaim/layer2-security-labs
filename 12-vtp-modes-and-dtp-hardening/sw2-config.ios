@@ -1,0 +1,33 @@
+hostname SW2
+!
+! 1. VTP Transparent Mode (Database Isolated, Forwards Advertisements)
+vtp domain CCNA
+vtp mode transparent
+!
+! 2. Local Departmental VLAN (Does not propagate)
+vlan 40
+ name Finance_Local
+!
+! 3. Trunk Interlinks (DTP Disabled)
+interface GigabitEthernet0/1
+ description ## Trunk to SW1 - DTP Suppressed ##
+ switchport mode trunk
+ switchport nonegotiate
+ no shutdown
+!
+interface GigabitEthernet0/2
+ description ## Trunk to SW3 - DTP Suppressed ##
+ switchport mode trunk
+ switchport nonegotiate
+ no shutdown
+!
+! 4. Local Access Ports
+interface range FastEthernet0/1-2
+ description ## Access: Finance Local (VLAN 40) ##
+ switchport mode access
+ switchport access vlan 40
+ switchport nonegotiate
+ spanning-tree portfast
+ no shutdown
+!
+end
