@@ -1,0 +1,21 @@
+hostname ASW2
+!
+interface Port-channel1
+ description ## L2 PAgP Trunk Bundle to DSW2 ##
+ switchport mode trunk
+!
+interface GigabitEthernet0/1
+ description ## L2 Member to DSW2 ##
+ switchport mode trunk
+ channel-protocol pagp
+ channel-group 1 mode desirable
+ no shutdown
+!
+interface GigabitEthernet0/2
+ description ## L2 Member to DSW2 ##
+ switchport mode trunk
+ channel-protocol pagp
+ channel-group 1 mode desirable
+ no shutdown
+!
+end
