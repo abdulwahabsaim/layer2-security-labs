@@ -1,0 +1,43 @@
+hostname SW1
+!
+! 1. VTP Server Mode Configuration
+vtp domain CCNA
+vtp mode server
+!
+! 2. Provision Campus VLANs
+vlan 10
+ name Engineering
+vlan 20
+ name Sales
+vlan 30
+ name HR
+vlan 40
+ name Finance
+vlan 50
+ name Management
+!
+! 3. Trunk Uplink to SW2 (DTP Disabled)
+interface GigabitEthernet0/1
+ description ## Trunk to SW2 - DTP Suppressed ##
+ switchport mode trunk
+ switchport nonegotiate
+ no shutdown
+!
+! 4. Access Ports
+interface range FastEthernet0/1-2
+ description ## Access: Engineering (VLAN 10) ##
+ switchport mode access
+ switchport access vlan 10
+ switchport nonegotiate
+ spanning-tree portfast
+ no shutdown
+!
+interface FastEthernet0/3
+ description ## Access: Sales (VLAN 20) ##
+ switchport mode access
+ switchport access vlan 20
+ switchport nonegotiate
+ spanning-tree portfast
+ no shutdown
+!
+end
