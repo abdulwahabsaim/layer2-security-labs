@@ -1,0 +1,19 @@
+hostname R1
+!
+! 1. Globally disable legacy CDP and enable open-standard LLDP
+no cdp run
+lldp run
+!
+interface GigabitEthernet0/0
+ description ## Infrastructure Link to R3 (LLDP Active) ##
+ no shutdown
+!
+interface GigabitEthernet0/1
+ description ## Infrastructure Link to R2 (LLDP Active) ##
+ no shutdown
+!
+interface GigabitEthernet0/2
+ description ## Infrastructure Link to SW1 (LLDP Active) ##
+ no shutdown
+!
+end
