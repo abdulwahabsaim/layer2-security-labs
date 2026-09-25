@@ -1,0 +1,52 @@
+hostname DSW1
+!
+ip routing
+!
+interface Port-channel1
+ description ## L2 LACP Trunk Bundle to ASW1 ##
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Port-channel2
+ description ## L3 Routed Bundle to DSW2 ##
+ no switchport
+ ip address 10.0.0.1 255.255.255.252
+!
+interface GigabitEthernet1/0/1
+ description ## L3 Member to DSW2 ##
+ no switchport
+ no ip address
+ channel-group 2 mode on
+ no shutdown
+!
+interface GigabitEthernet1/0/2
+ description ## L3 Member to DSW2 ##
+ no switchport
+ no ip address
+ channel-group 2 mode on
+ no shutdown
+!
+interface GigabitEthernet1/0/3
+ description ## L2 Member to ASW1 ##
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-protocol lacp
+ channel-group 1 mode active
+ no shutdown
+!
+interface GigabitEthernet1/0/4
+ description ## L2 Member to ASW1 ##
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-protocol lacp
+ channel-group 1 mode active
+ no shutdown
+!
+interface Vlan1
+ ip address 172.16.1.254 255.255.255.0
+ no shutdown
+!
+! Static route to ASW2's subnet via routed Port-Channel
+ip route 172.16.2.0 255.255.255.0 10.0.0.2
+!
+end
