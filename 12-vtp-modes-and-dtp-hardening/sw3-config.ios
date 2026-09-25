@@ -1,0 +1,39 @@
+hostname SW3
+!
+! 1. VTP Client Mode Configuration (Synchronizes from Server)
+vtp domain CCNA
+vtp mode client
+!
+! 2. Trunk Uplink to SW2 (DTP Disabled)
+interface GigabitEthernet0/1
+ description ## Trunk to SW2 - DTP Suppressed ##
+ switchport mode trunk
+ switchport nonegotiate
+ no shutdown
+!
+! 3. Access Ports Configured into VTP-Propagated VLANs
+interface FastEthernet0/1
+ description ## Access: Engineering (VLAN 10) ##
+ switchport mode access
+ switchport access vlan 10
+ switchport nonegotiate
+ spanning-tree portfast
+ no shutdown
+!
+interface range FastEthernet0/2-3
+ description ## Access: HR (VLAN 30) ##
+ switchport mode access
+ switchport access vlan 30
+ switchport nonegotiate
+ spanning-tree portfast
+ no shutdown
+!
+interface FastEthernet0/4
+ description ## Access: Sales (VLAN 20) ##
+ switchport mode access
+ switchport access vlan 20
+ switchport nonegotiate
+ spanning-tree portfast
+ no shutdown
+!
+end
